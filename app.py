@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from models.user import User
 from database import db
 from flask_login import LoginManager
@@ -21,7 +21,11 @@ def login():
 
     if username and password:
         # login
-        pass
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.password == password:
+            return jsonify({'message': 'Autenticação realizada com sucesso'}), 200
+            
     return jsonify({'message': 'Credenciais invalidas'}), 400
 
 @app.route('/hello-world')
