@@ -81,8 +81,12 @@ def update_user(id_user):
 def delete_user(id_user):
     user = User.query.get(id_user)
 
+    if  id_user == current_user.id:
+        return jsonify({'message': 'Você não pode deletar sua própria conta'}), 403
     if user:
-        return jsonify({'message': 'Usuario deletado com suce'})
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'Usuario deletado com sucesso'})
     
     return jsonify({'message': 'Usuario não encontrado'}), 404
 
